@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Connect to FastAPI</title>
+    <style>
+        /* (Same CSS as before - hidden for brevity) */
+        body { font-family: sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; background: #f0f2f5; }
+        .input-container { background: white; padding: 2rem; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); width: 300px; }
+        .styled-input { width: 100%; padding: 10px; margin: 10px 0; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box;}
+        .submit-btn { width: 100%; padding: 10px; background: #007BFF; color: white; border: none; border-radius: 5px; cursor: pointer; }
+        .submit-btn:hover { background: #0056b3; }
+    </style>
+</head>
+<body>
+
+    <div class="input-container">
+        <h3>Losowanie prezentów</h3>
+        <h4>Wpisz swoje imię (wielkość liter nie ma znaczenia są polskie znaki)</h4>
+        <input type="text" id="userData" class="styled-input" placeholder="Enter your name">
+        <button class="submit-btn" onclick="submitData()">Send to Backend</button>
+        
+        <p id="responseMessage" style="margin-top: 15px; color: green;"></p>
+    </div>
+
+    <script>
+        async function submitData() {
+            const inputField = document.getElementById('userData');
+            const responseText = document.getElementById('responseMessage');
+            const nameValue = inputField.value;
+
+            if (!nameValue) {
+                alert("Please enter a name");
+                return;
+            }
+
+            try {
+                // 1. Prepare the data
+                const payload = { name: nameValue };
+
+                // 2. Send the POST request
+                const response = await fetch('http://127.0.0.1:8000/getNames/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(payload), // Convert JS object to JSON string
+                });
+
+                // 3. Handle the response
+                if (response.ok) {
+                    const result = await response.json();
+                    console.log("Success:", result);
+                    responseText.innerText = result.message; // Show backend message on screen
+                } else {
+                    console.error("Server Error:", response.status);
+                    responseText.innerText = "Error connecting to server.";
+                    responseText.style.color = "red";
+                }
+
+            } catch (error) {
+                console.error("Network Error:", error);
+                responseText.innerText = "Network error! Is the backend running?";
+                responseText.style.color = "red";
+            }
+        }
+    </script>
+</body>
+</html>
