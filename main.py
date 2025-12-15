@@ -4,6 +4,7 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse
 from pydantic import BaseModel
 
+
 app = FastAPI()
 
 app.mount("/static", StaticFiles(directory="static"), name="static")
@@ -31,7 +32,10 @@ listOfGifts = {
     "tymon": "Agnieszka",
     "zuzia": "Alicja",
 }
-
+@app.get("/")
+async def read_root():
+    # This tells FastAPI: "When someone visits '/', send them this file"
+    return FileResponse('static/index.html')
 
 @app.post("/getNames")
 def fname(name: UserInput):
