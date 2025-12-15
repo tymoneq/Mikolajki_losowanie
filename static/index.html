@@ -40,7 +40,7 @@
                 const payload = { name: nameValue };
 
                 // 2. Send the POST request
-                const response = await fetch('http://127.0.0.1:8000/getNames/', {
+                const response = await fetch('getNames/', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
