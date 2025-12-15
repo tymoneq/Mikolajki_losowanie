@@ -37,7 +37,7 @@ async def read_root():
     # This tells FastAPI: "When someone visits '/', send them this file"
     return FileResponse('static/index.html')
 
-@app.post("/getNames")
+@app.post("/getNames/")
 def fname(name: UserInput):
     print(name.name)
     name.name = name.name.lower()
